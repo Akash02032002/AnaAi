@@ -17,9 +17,13 @@ class LocalMemoryStore(context: Context) {
                 relationshipStyle = json.optString("relationshipStyle", "soft_girlfriend"),
                 adultConfirmed = json.optBoolean("adultConfirmed", false),
                 darkTheme = json.optBoolean("darkTheme", false),
-                backendUrl = json.optString("backendUrl", "https://anaai-i2x9.onrender.com"),
+                backendUrl = normalizeBackendUrl(json.optString("backendUrl", DEFAULT_BACKEND_URL)),
             )
-        }.getOrDefault(UserProfile())
+        }.getOrDefault(UserProfile()).also { profile ->
+            if (profile.backendUrl != jsonBackendUrl(raw)) {
+                saveProfile(profile)
+            }
+        }
     }
 
     fun saveProfile(profile: UserProfile) {
@@ -114,4 +118,22 @@ class LocalMemoryStore(context: Context) {
         private const val KEY_MEMORIES = "memories"
         private const val KEY_MESSAGES = "messages"
     }
+}
+
+private fun normalizeBackendUrl(url: String): String {
+    val clean = url.trim().trimEnd('/')
+    return when (clean) {
+        "",
+        "http://127.0.0.1:8000",
+        "http://localhost:8000",
+        "http://10.0.2.2:8000",
+        -> DEFAULT_BACKEND_URL
+        else -> clean
+    }
+}
+
+private fun jsonBackendUrl(raw: String): String {
+    return runCatching {
+        JSONObject(raw).optString("backendUrl", DEFAULT_BACKEND_URL)
+    }.getOrDefault(DEFAULT_BACKEND_URL)
 }
