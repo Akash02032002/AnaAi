@@ -41,7 +41,7 @@ data class UserProfile(
     val relationshipStyle: String = "soft_girlfriend",
     val adultConfirmed: Boolean = false,
     val darkTheme: Boolean = false,
-    val backendUrl: String = "http://127.0.0.1:8000",
+    val backendUrl: String = "https://anaai-i2x9.onrender.com",
 )
 
 data class ChatMessage(

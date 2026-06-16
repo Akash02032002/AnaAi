@@ -17,7 +17,7 @@ class LocalMemoryStore(context: Context) {
                 relationshipStyle = json.optString("relationshipStyle", "soft_girlfriend"),
                 adultConfirmed = json.optBoolean("adultConfirmed", false),
                 darkTheme = json.optBoolean("darkTheme", false),
-                backendUrl = json.optString("backendUrl", "http://127.0.0.1:8000"),
+                backendUrl = json.optString("backendUrl", "https://anaai-i2x9.onrender.com"),
             )
         }.getOrDefault(UserProfile())
     }
